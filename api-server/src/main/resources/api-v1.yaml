@@ -1,0 +1,224 @@
+openapi: '3.0.0'
+info:
+  description: 'Word Art Generator - API specifications'
+  version: '1.0.0'
+  title: 'Word Art Generator'
+  contact:
+    email: 'dummy@dummy.com'
+servers:
+  - url: /word-art-gen/api/v1
+paths:
+  /jobs:
+    post:
+      tags:
+      - 'job'
+      summary: 'Submit Word Art Job'
+      description: 'This operation is used to submit a job for generation. '
+      operationId: 'submitJob'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobRequest'
+      responses:
+        '201':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+          links:
+            'GetJobById':
+              operationId: 'getJobById'
+              parameters:
+                jobId: '$response.body#/id'
+              description: >
+                The `id` value returned in the response can be used as
+                the `jobId` parameter in `GET /jobs/{jobId}`.
+        default:
+          description: 'unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /jobs/{jobId}:
+    get:
+      tags:
+      - 'job'
+      summary: 'Find Job by ID'
+      description: 'Returns a single Job'
+      operationId: 'getJobById'
+      parameters:
+      - name: 'jobId'
+        in: 'path'
+        description: 'ID of job to return'
+        required: true
+        schema:
+          type: 'string'
+          format: 'uuid'
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Job not found'
+    delete:
+      tags:
+      - 'job'
+      summary: 'Delete a Job by Id [TODO *NOT WORKING*]'
+      description: 'Delete a single Job [TODO *NOT WORKING*]'
+      operationId: 'deleteJobById'
+      parameters:
+      - name: 'jobId'
+        in: 'path'
+        description: 'ID of job to delete'
+        required: true
+        schema:
+          type: 'string'
+          format: 'uuid'
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Job not found'
+  /jobs/{jobId}/art:
+    get:
+      tags:
+      - 'job'
+      summary: 'Get generated Word Art'
+      description: 'Returns Word art image or text'
+      operationId: 'getWordArt'
+      parameters:
+      - name: 'jobId'
+        in: 'path'
+        description: 'ID of word art job'
+        required: true
+        schema:
+          type: 'string'
+          format: 'uuid'
+      responses:
+        '200':
+          description: 'Word art in PNG/JPEG/TIFF/ASCII format'
+          content:
+            image/png:
+              schema:
+                type: 'string'
+                format: 'binary'
+            image/jpeg:
+              schema:
+                type: 'string'
+                format: 'binary'
+            image/tiff:
+              schema:
+                type: 'string'
+                format: 'binary'
+            text/plain:
+              schema:
+                type: 'string'
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Word art not found'
+components:
+  schemas:
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    JobRequest:
+      type: 'object'
+      required:
+      - 'format'
+      - 'effect'
+      - 'colour'
+      - 'font'
+      - 'text'
+      properties:
+        format:
+          type: 'string'
+          description: 'Output Format of Job'
+          enum:
+          - 'PNG'
+          - 'JPEG'
+          - 'TIFF'
+          - 'ASCII'
+        effect:
+          type: 'array'
+          items:
+            type: string
+          description: 'Effects to be applied for the Job'
+          enum:
+          - 'SHADOW_HARD'
+          - 'SHADOW_REFLECT'
+          - 'GRADIENT'
+          - 'OUTLINE'
+        colour:
+          type: 'string'
+          description: 'Text colour for the Job'
+          enum:
+          - 'RED'
+          - 'GREEN'
+          - 'BLUE'
+          - 'BLACK'
+          - 'GREY'
+          - 'WHITE'
+        font:
+          type: 'string'
+          description: 'Font to be used'
+          enum:
+          - 'FreeMono'
+        text:
+          type: 'string'
+          description: 'Text to be generated'
+          minLength: 1
+          maxLength: 30
+    JobResponse:
+      allOf:     # Combines the BasicErrorModel and the inline model
+        - $ref: '#/components/schemas/JobRequest'
+        - type: object
+          required:
+            - id
+            - status
+          properties:
+            id:
+              type: 'string'
+              format: 'uuid'
+              description: 'Auto generated UUID.'
+            status:
+              type: 'string'
+              description: 'Status of job'
+              enum:
+              - 'ACCEPTED'
+              - 'RUNNING'
+              - 'GENERATED'
+              - 'FAILED'
+              - 'DELETED'

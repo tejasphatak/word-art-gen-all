@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.wordart.gen</groupId>
+  <artifactId>wordart-gen-all</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Word Art Generator - All Projects</name>
+  <packaging>pom</packaging>
+  <modules>
+	<module>parent</module>
+  	<module>api-server</module>
+  	<module>business</module>
+  	<module>data</module>
+  	<module>common</module>
+  	<module>messaging</module>
+  	<module>queue-processor</module>
+  </modules>
+  <description>Parent POM for build all functionality</description>
+</project>

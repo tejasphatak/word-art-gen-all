@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.wordart.gen</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
+  </parent>
+  <artifactId>business</artifactId>
+  <name>Word Art Generator - Business</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.wordart.gen</groupId>
+  		<artifactId>data</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.wordart.gen</groupId>
+  		<artifactId>common</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.wordart.gen</groupId>
+  		<artifactId>messaging</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
+  </dependencies>
+  <description>This layer deals with business aspect of the project.</description>
+</project>
