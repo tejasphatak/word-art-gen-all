@@ -3,7 +3,7 @@
   <groupId>com.wordart.gen</groupId>
   <artifactId>wordart-gen-all</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Word Art Generator - All Projects</name>
+  <name>Scalable Word Art Generator - All Projects</name>
   <packaging>pom</packaging>
   <modules>
 	<module>parent</module>
